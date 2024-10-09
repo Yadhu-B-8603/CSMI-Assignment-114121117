@@ -1,42 +1,55 @@
-% Facts: people and their weights
+% River Crossing Problem:
+% A man, a woman, and two children need to cross a river using a boat.
+% The boat can carry up to 100 kg. The man and the woman each weigh 80 kg,
+% and the two children each weigh 30 kg.
+
+% Facts: weights of the people
 weight(man, 80).
 weight(woman, 80).
 weight(child1, 30).
 weight(child2, 30).
 
-% Initial and goal states
+% Initial state: everyone is on the left bank of the river
+% state(left bank, list of people on left bank, list of people on right bank)
 initial(state(left, [man, woman, child1, child2], [])).
+
+% Goal state: everyone has crossed to the right bank
 goal(state(right, [], [man, woman, child1, child2])).
 
-% Predicate for moving individuals across the river
+% Predicate: move from one bank to the other
+% move(current state, next state, list of people who cross the river)
 move(state(left, LeftBank, RightBank), state(right, NewLeftBank, NewRightBank), People) :-
-    select_people(People, LeftBank, NewLeftBank), % Select who will move from LeftBank to RightBank
-    valid(People), % Ensure the boat's weight limit is not exceeded
-    append(People, RightBank, NewRightBank).
+    select_people(People, LeftBank, NewLeftBank), % Select people from LeftBank to move
+    valid(People), % Check that the selected people don't exceed the boat's weight limit
+    append(People, RightBank, NewRightBank). % Add selected people to the RightBank
+
 move(state(right, LeftBank, RightBank), state(left, NewLeftBank, NewRightBank), People) :-
-    select_people(People, RightBank, NewRightBank), % Select who will move from RightBank to LeftBank
-    valid(People), % Ensure the boat's weight limit is not exceeded
-    append(People, LeftBank, NewLeftBank).
+    select_people(People, RightBank, NewRightBank), % Select people from RightBank to move
+    valid(People), % Check that the selected people don't exceed the boat's weight limit
+    append(People, LeftBank, NewLeftBank). % Add selected people to the LeftBank
 
-% Helper predicate to select up to 2 people for the boat
-select_people([A, B], Bank, NewBank) :- select(A, Bank, TempBank), select(B, TempBank, NewBank).
-select_people([A], Bank, NewBank) :- select(A, Bank, NewBank).
+% Predicate: select up to two people from a bank to move in the boat
+% select_people(list of selected people, bank, remaining people on the bank)
+select_people([A, B], Bank, NewBank) :- select(A, Bank, TempBank), select(B, TempBank, NewBank). % Two people
+select_people([A], Bank, NewBank) :- select(A, Bank, NewBank). % One person
 
-% Predicate to check if the boat's total weight is within the limit
+% Predicate: check if the total weight of selected people is within the boat's capacity (<= 100 kg)
 valid(People) :- total_weight(People, W), W =< 100.
 
-% Predicate to calculate total weight of selected people
-total_weight([], 0).
+% Predicate: calculate the total weight of selected people
+% total_weight(list of people, total weight)
+total_weight([], 0). % Base case: no people, weight is 0
 total_weight([Person|Rest], TotalWeight) :-
-    weight(Person, W),
-    total_weight(Rest, RestWeight),
-    TotalWeight is W + RestWeight.
+    weight(Person, W), % Get the weight of the first person
+    total_weight(Rest, RestWeight), % Recursively calculate the total weight of the remaining people
+    TotalWeight is W + RestWeight. % Sum the weights
 
-% Solving the problem by performing the crossings
-solve(State, [State]) :- goal(State).
-solve(State, [State|Rest]) :-
-    move(State, NextState, _),
-    solve(NextState, Rest).
+% Solving the problem: find the sequence of moves to reach the goal
+solve(State, [State]) :- goal(State). % Base case: if the current state is the goal, we are done
+solve(State, [State|Rest]) :- 
+    move(State, NextState, _), % Find a valid move to the next state
+    solve(NextState, Rest). % Recursively solve the problem from the next state
 
-%Query
-initial(State), solve(State, Moves).
+% To solve the problem, run the query:
+% ?- initial(State), solve(State, Moves).
+% This will give you the sequence of states (Moves) showing how everyone crosses the river.
