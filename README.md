@@ -31,3 +31,5 @@ A. For the river crossing problem, we need to ensure that the group of two adult
    The boat can carry a maximum of 100 kg.
    
    We can break down the solution into the possible combinations of people crossing the river, and write a Prolog program to find the solution.
+
+   The prolog code given in Q2
