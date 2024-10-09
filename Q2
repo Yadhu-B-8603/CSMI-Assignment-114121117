@@ -1,0 +1,42 @@
+% Facts: people and their weights
+weight(man, 80).
+weight(woman, 80).
+weight(child1, 30).
+weight(child2, 30).
+
+% Initial and goal states
+initial(state(left, [man, woman, child1, child2], [])).
+goal(state(right, [], [man, woman, child1, child2])).
+
+% Predicate for moving individuals across the river
+move(state(left, LeftBank, RightBank), state(right, NewLeftBank, NewRightBank), People) :-
+    select_people(People, LeftBank, NewLeftBank), % Select who will move from LeftBank to RightBank
+    valid(People), % Ensure the boat's weight limit is not exceeded
+    append(People, RightBank, NewRightBank).
+move(state(right, LeftBank, RightBank), state(left, NewLeftBank, NewRightBank), People) :-
+    select_people(People, RightBank, NewRightBank), % Select who will move from RightBank to LeftBank
+    valid(People), % Ensure the boat's weight limit is not exceeded
+    append(People, LeftBank, NewLeftBank).
+
+% Helper predicate to select up to 2 people for the boat
+select_people([A, B], Bank, NewBank) :- select(A, Bank, TempBank), select(B, TempBank, NewBank).
+select_people([A], Bank, NewBank) :- select(A, Bank, NewBank).
+
+% Predicate to check if the boat's total weight is within the limit
+valid(People) :- total_weight(People, W), W =< 100.
+
+% Predicate to calculate total weight of selected people
+total_weight([], 0).
+total_weight([Person|Rest], TotalWeight) :-
+    weight(Person, W),
+    total_weight(Rest, RestWeight),
+    TotalWeight is W + RestWeight.
+
+% Solving the problem by performing the crossings
+solve(State, [State]) :- goal(State).
+solve(State, [State|Rest]) :-
+    move(State, NextState, _),
+    solve(NextState, Rest).
+
+%Query
+initial(State), solve(State, Moves).
