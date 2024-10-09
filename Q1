@@ -1,0 +1,12 @@
+% Family domain rules
+parent(X, Y) :- father(X, Y); mother(X, Y).
+father(john, speaker).
+
+% The riddle in Prolog
+that_man(X) :- 
+    father(Y, X),  % "that man's father is"
+    father(Y, Z),  % "my father's son"
+    Z = X,        % Since "my father's son" is myself
+    speaker = Z.
+
+% Query: Who is 'that man'?
