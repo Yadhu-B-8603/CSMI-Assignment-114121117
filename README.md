@@ -2,7 +2,7 @@
 114121117  Yadhu B Assignment
 
 This assignment contain 2 questions:
-# 1. A popular children’s riddle is “Brothers and sisters have I none, but that man’s father is my father’s son.” Use the rules of the family domain to find who that man is using a Prolog program.
+1. A popular children’s riddle is “Brothers and sisters have I none, but that man’s father is my father’s son.” Use the rules of the family domain to find who that man is using a Prolog program.
 
 A. This riddle can be solved using Prolog's family domain rules. The key statement in the riddle is:
    "Brothers and sisters have I none, but that man’s father is my father’s son."
@@ -18,7 +18,7 @@ A. This riddle can be solved using Prolog's family domain rules. The key stateme
   The prolog code is given in the file name Q1
 
 
-# 2. A man, a woman and two children had to go to the opposite bank of a river using a boat. The man and the woman weighed 80 kg each and the children weighed 30 kg each. Given that the boat can carry upto 100 kg and that everyone can drive a boat, write a Prolog program to find how all four can cross the river with the boat.
+2. A man, a woman and two children had to go to the opposite bank of a river using a boat. The man and the woman weighed 80 kg each and the children weighed 30 kg each. Given that the boat can carry upto 100 kg and that everyone can drive a boat, write a Prolog program to find how all four can cross the river with the boat.
 
 A. For the river crossing problem, we need to ensure that the group of two adults and two children can cross the river using a boat that can only carry up to 100 kg.
 
