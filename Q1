@@ -1,12 +1,16 @@
-% Family domain rules
-parent(X, Y) :- father(X, Y); mother(X, Y).
+% Riddle: "Brothers and sisters have I none, but that man’s father is my father’s son."
+
+% Fact: John is the father of the speaker (the person who is telling the riddle)
 father(john, speaker).
 
-% The riddle in Prolog
+% Rule: To solve the riddle, we need to determine who "that man" is.
+% "that man's father" (Y) must be "my father's son" (Z), and Z must be myself (speaker)
 that_man(X) :- 
-    father(Y, X),  % "that man's father is"
-    father(Y, Z),  % "my father's son"
-    Z = X,        % Since "my father's son" is myself
-    speaker = Z.
+    father(Y, X),  % Y is the father of X (that man’s father)
+    father(Y, Z),  % Y is also my father’s son (myself, the speaker)
+    Z = X,         % Z must be equal to X, meaning that man is myself
+    speaker = Z.   % Z is the speaker (no siblings, so my father's son is me)
 
 % Query: Who is 'that man'?
+% To get the result, run the query: ?- that_man(X).
+% Expected answer: X = speaker (indicating that "that man" is the speaker himself)
